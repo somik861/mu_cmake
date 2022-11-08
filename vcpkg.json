@@ -1,0 +1,11 @@
+{
+    "name": "mu",
+    "version-string": "0.0.1",
+    "dependencies": [
+        "icu",
+        {
+            "name": "poppler",
+            "features": [ "glib" ]
+        }
+    ]
+}
