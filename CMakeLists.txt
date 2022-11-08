@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 include(mu/bricks/support.cmake)
 
 project(mu_package)
@@ -8,13 +8,43 @@ find_package(PkgConfig REQUIRED)
 
 set(LIBS ${LIBS} pthread)
 
-set(MU_DIR ${CMAKE_SOURCE_DIR}/mu/mu)
-pkg_check_modules(GLIB REQUIRED poppler-glib)
-pkg_check_modules(ICU REQUIRED icu-uc)
+# vcpkg
+# ICU
+find_package(ICU REQUIRED COMPONENTS uc dt in io)
+set(LIBS ${LIBS}
+ ${ICU_UC_LIBRARY_RELEASE}
+ ${ICU_DT_LIBRARY_RELEASE}
+ ${ICU_IN_LIBRARY_RELEASE}
+ ${ICU_IO_LIBRARY_RELEASE})
 
-set(LIBS ${LIBS} ${GLIB_LINK_LIBRARIES} ${ICU_LINK_LIBRARIES})
-set(INCLS ${INCLS} ${CMAKE_SOURCE_DIR}/mu/bricks ${MU_DIR} ${GLIB_INCLUDE_DIRS} ${ICU_INCLUDE_DIRS})
-set(CFLAGS ${CFLAGS} ${GLIB_CFLAGS} ${ICU_CFLAGS})
+# glib
+pkg_search_module(GLIB2 REQUIRED glib-2.0 IMPORTED_TARGET)
+set(LIBS ${LIBS} ${GLIB2_LINK_LIBRARIES})
+set(INCLS ${INCLS} ${GLIB2_INCLUDE_DIRS})
+set(CFLAGS ${CFLAGS} ${GLIB2_CFLAGS})
+
+# poppler
+find_package(unofficial-poppler CONFIG REQUIRED)
+set(LIBS ${LIBS}
+   unofficial::poppler::poppler-cpp 
+   unofficial::poppler::poppler-private)
+
+pkg_search_module(POPPLER REQUIRED poppler-glib IMPORTED_TARGET)
+set(LIBS ${LIBS} ${POPPLER_LINK_LIBRARIES} 
+"${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libgio-2.0.a"
+"${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libgmodule-2.0.a"
+"${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libgthread-2.0.a"
+)
+set(INCLS ${INCLS} ${POPPLER_INCLUDE_DIRS})
+set(CFLAGS ${CFLAGS} ${POPPLER_CFLAGS})
+
+
+# end of vcpkg
+
+set(MU_DIR ${CMAKE_SOURCE_DIR}/mu/mu)
+
+set(LIBS ${LIBS})
+set(INCLS ${INCLS} ${CMAKE_SOURCE_DIR}/mu/bricks ${MU_DIR})
 
 add_executable(mu "${MU_DIR}/main.cpp" "${MU_DIR}/doc/convert.cpp")
 add_executable(mu-pic "${MU_DIR}/pic.cpp")
