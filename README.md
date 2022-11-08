@@ -1,7 +1,7 @@
 # mu\_cmake
 
 ## Attention: 
-Please download whole repository using git clone --recursive `link`
+Please download whole repository using `git clone --recursive *link*`
 
 ## Credits: 
 The **mu** project is not my work, neither am I a co-worker of authors. The only thing I have created is CmakeLists.txt file that can compile the project. 
