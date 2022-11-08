@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 include(mu/bricks/support.cmake)
 
 project(mu_package)
 find_package(PkgConfig REQUIRED)
 
-set(LIBS ${LIBS} pthread)
+set(LIBS ${LIBS} pthread resolv)
 
 # vcpkg
 # ICU
