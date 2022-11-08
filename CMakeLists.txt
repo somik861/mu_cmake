@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Release)
 include(mu/bricks/support.cmake)
 
-find_package(PkgConfig REQUIRED)
-
 project(mu_package)
+find_package(PkgConfig REQUIRED)
 
 set(LIBS ${LIBS} pthread)
 
