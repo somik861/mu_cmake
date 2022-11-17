@@ -24,19 +24,25 @@ set(INCLS ${INCLS} ${GLIB2_INCLUDE_DIRS})
 set(CFLAGS ${CFLAGS} ${GLIB2_CFLAGS})
 
 # poppler
-find_package(unofficial-poppler CONFIG REQUIRED)
-set(LIBS ${LIBS}
-   unofficial::poppler::poppler-cpp 
-   unofficial::poppler::poppler-private)
+IF (NOT "${VCPKG_TARGET_TRIPLET}" STREQUAL "")
+    find_package(unofficial-poppler CONFIG REQUIRED)
+    set(LIBS ${LIBS}
+       unofficial::poppler::poppler-cpp 
+       unofficial::poppler::poppler-private)
+ENDIF()
 
 pkg_search_module(POPPLER REQUIRED poppler-glib IMPORTED_TARGET)
-set(LIBS ${LIBS} ${POPPLER_LINK_LIBRARIES} 
-"${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libgio-2.0.a"
+set(LIBS ${LIBS} ${POPPLER_LINK_LIBRARIES}) 
+
+set(INCLS ${INCLS} ${POPPLER_INCLUDE_DIRS})
+set(CFLAGS ${CFLAGS} ${POPPLER_CFLAGS})
+
+IF (NOT "${VCPKG_TARGET_TRIPLET}" STREQUAL "")
+set(LIBS ${LIBS} "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libgio-2.0.a"
 "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libgmodule-2.0.a"
 "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libgthread-2.0.a"
 )
-set(INCLS ${INCLS} ${POPPLER_INCLUDE_DIRS})
-set(CFLAGS ${CFLAGS} ${POPPLER_CFLAGS})
+ENDIF()
 
 
 # end of vcpkg
