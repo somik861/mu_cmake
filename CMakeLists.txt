@@ -10,12 +10,9 @@ set(LIBS ${LIBS} pthread resolv)
 
 # vcpkg
 # ICU
-find_package(ICU REQUIRED COMPONENTS uc dt in io)
+find_package(ICU REQUIRED COMPONENTS uc)
 set(LIBS ${LIBS}
- ${ICU_UC_LIBRARY_RELEASE}
- ${ICU_DT_LIBRARY_RELEASE}
- ${ICU_IN_LIBRARY_RELEASE}
- ${ICU_IO_LIBRARY_RELEASE})
+ ${ICU_UC_LIBRARY_RELEASE})
 
 # glib
 pkg_search_module(GLIB2 REQUIRED glib-2.0 IMPORTED_TARGET)
